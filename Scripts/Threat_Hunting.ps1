@@ -211,6 +211,8 @@ Write-Host "Scheduled Tasks: Pending"
 Write-Host ""
 Write-Host "Downloading network statistics..."
 
+# Get-NetworkStatistics was used from another source, but I have long since lost the source...
+
 function Get-NetworkStatistics {
     <#
 
