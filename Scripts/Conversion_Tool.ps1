@@ -160,7 +160,7 @@ do {
             Write-Host "Your current T9 string is: $T9"
             Write-Host ""
     			$String = Read-Host "
-Enter your T9 string of single numbers or type in 'space' to add an underscore"
+Enter your T9 string of single numbers or type in '0' to add an underscore"
 			
 			# Translate $String to T9 Character Loop
 			
@@ -345,7 +345,7 @@ Enter your T9 string of single numbers or type in 'space' to add an underscore"
         			$T9_Z = "Z"
         			$T9 = $T9+$T9_Z
         			Write-Host Your T9 String is as follows: $T9
-    			} elseif ($String -eq "space"){
+    			} elseif ($String -eq "0"){
         			Write-Host ""
         			Write-Host "_"
         			Write-Host ""
