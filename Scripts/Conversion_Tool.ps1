@@ -368,6 +368,9 @@ Press 'enter' or type 'y' and press 'enter' to continue' and type anything else 
             Write-Host "╚═══════════════════════════════════════════════════╝"
             Write-Host ""
 			Write-Host Your Answer: $T9
+            Write-Host ""
+            $T9 | clip
+            Write-Host "Your T9 string has been copied to your clipboard."
 			Write-Host ""
 			            }
         '6' {
