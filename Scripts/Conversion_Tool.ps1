@@ -12,7 +12,7 @@ function Show-Menu {
     Write-Host "║ 2: Convert Octal, (BASE8), to other bases.        ║"
     Write-Host "║ 3: Convert Decimal, (BASE10), to other bases.     ║"
     Write-Host "║ 4: Convert Hexadecimal, (BASE16), to other bases. ║"
-    Write-Host "║ 5: Convert T9.                                    ║"
+    Write-Host "║ 5: Convert Nubmer to T9.                          ║"
     Write-Host "║ 6: Decode BASE64.                                 ║"
     Write-Host "║ 7: Encode BASE64.                                 ║"
     Write-Host "║ Q: Quit PowerShell Conversion Tool.               ║"
