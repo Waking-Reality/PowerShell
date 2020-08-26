@@ -153,14 +153,22 @@ do {
 			
 			While ($Alive -eq "y") {
             Clear-Host
-            Write-Host "╔═══════════════════════════════════════════════════╗"
-            Write-Host "║            PowerShell Conversion Tool             ║"
-            Write-Host "╚═══════════════════════════════════════════════════╝"
+            Write-Host "╔═══════════════════════════════════════════════════════════╗"
+            Write-Host "║                PowerShell Conversion Tool                 ║"
+            Write-Host "╠═══════════════════╦═══════════════════╦═══════════════════╣"
+            Write-Host "║ 1 = . , ' @ - : / ║     2 = A B C     ║     3 = D E F     ║"
+            Write-Host "╠═══════════════════╬═══════════════════╬═══════════════════╣"
+            Write-Host "║     4 = G H I     ║     5 = J K L     ║     6 = M N O     ║"
+            Write-Host "╠═══════════════════╬═══════════════════╬═══════════════════╣"
+            Write-Host "║   7 = P Q R S     ║     8 = T U V     ║   9 = W X Y Z     ║"
+            Write-Host "╠═══════════════════╩═══════════════════╩═══════════════════╣"
+            Write-Host "║                        0 = 'space'                        ║"
+            Write-Host "╚═══════════════════════════════════════════════════════════╝"
             Write-Host ""
             Write-Host "Your current T9 string is: $T9"
             Write-Host ""
     			$String = Read-Host "
-Enter your T9 string of single numbers or type in '0' to add an underscore"
+Enter your T9 string of single numbers"
 			
 			# Translate $String to T9 Character Loop
 			
@@ -347,9 +355,72 @@ Enter your T9 string of single numbers or type in '0' to add an underscore"
         			Write-Host Your T9 String is as follows: $T9
     			} elseif ($String -eq "0"){
         			Write-Host ""
-        			Write-Host "_"
+        			Write-Host " "
         			Write-Host ""
-        			$T9_Space = "_"
+        			$T9_Space = " "
+        			$T9 = $T9+$T9_Space
+        			Write-Host Your T9 String is as follows: $T9
+    			} elseif ($String -eq "1"){
+        			Write-Host ""
+        			Write-Host "."
+        			Write-Host ""
+        			$T9_Space = "."
+        			$T9 = $T9+$T9_Space
+        			Write-Host Your T9 String is as follows: $T9
+    			} elseif ($String -eq "11"){
+        			Write-Host ""
+        			Write-Host ","
+        			Write-Host ""
+        			$T9_Space = ","
+        			$T9 = $T9+$T9_Space
+        			Write-Host Your T9 String is as follows: $T9
+    			} elseif ($String -eq "111"){
+        			Write-Host ""
+        			Write-Host "'"
+        			Write-Host ""
+        			$T9_Space = "'"
+        			$T9 = $T9+$T9_Space
+        			Write-Host Your T9 String is as follows: $T9
+    			} elseif ($String -eq "1111"){
+        			Write-Host ""
+        			Write-Host "@"
+        			Write-Host ""
+        			$T9_Space = "@"
+        			$T9 = $T9+$T9_Space
+        			Write-Host Your T9 String is as follows: $T9
+    			} elseif ($String -eq "11111"){
+        			Write-Host ""
+        			Write-Host "?"
+        			Write-Host ""
+        			$T9_Space = "?"
+        			$T9 = $T9+$T9_Space
+        			Write-Host Your T9 String is as follows: $T9
+    			} elseif ($String -eq "111111"){
+        			Write-Host ""
+        			Write-Host "!"
+        			Write-Host ""
+        			$T9_Space = "!"
+        			$T9 = $T9+$T9_Space
+        			Write-Host Your T9 String is as follows: $T9
+    			} elseif ($String -eq "1111111"){
+        			Write-Host ""
+        			Write-Host "-"
+        			Write-Host ""
+        			$T9_Space = "-"
+        			$T9 = $T9+$T9_Space
+        			Write-Host Your T9 String is as follows: $T9
+    			} elseif ($String -eq "11111111"){
+        			Write-Host ""
+        			Write-Host ":"
+        			Write-Host ""
+        			$T9_Space = ":"
+        			$T9 = $T9+$T9_Space
+        			Write-Host Your T9 String is as follows: $T9
+    			} elseif ($String -eq "111111111"){
+        			Write-Host ""
+        			Write-Host "/"
+        			Write-Host ""
+        			$T9_Space = "/"
         			$T9 = $T9+$T9_Space
         			Write-Host Your T9 String is as follows: $T9
 			}
