@@ -15,6 +15,8 @@ function Show-Menu {
     Write-Host "║ 5: Convert Number to T9.                          ║"
     Write-Host "║ 6: Decode BASE64.                                 ║"
     Write-Host "║ 7: Encode BASE64.                                 ║"
+    Write-Host "║ 8: Fahrenheit to Celsius.                         ║"
+    Write-Host "║ 9: Celsius to Fahrenheit.                         ║"
     Write-Host "║ Q: Quit PowerShell Conversion Tool.               ║"
     Write-Host "║                                                   ║"
     Write-Host "╚═══════════════════════════════════════════════════╝"
@@ -473,6 +475,32 @@ Press 'enter' or type 'y' and press 'enter' to continue' and type anything else 
             Write-Host ""
             $BASE64_Encoded | clip
             Write-Host "This BASE64 Encoded string has been copied to your clipboard."
+            Write-Host ""
+            }
+	'8' {
+            Clear-Host
+            Write-Host "╔═══════════════════════════════════════════════════╗"
+            Write-Host "║            PowerShell Conversion Tool             ║"
+            Write-Host "╚═══════════════════════════════════════════════════╝"
+            Write-Host ""
+            [int]$F = Read-Host "Enter the Fahrenheit that you want to convert to Celsius"
+            $F2C = ($F - 32) * (5 / 9)
+            $C = [math]::Round($F2C,2)
+            Write-Host ""
+            Write-Host "$F° Fahrenheit is $C° in Celsius."
+            Write-Host ""
+            }
+	'9' {
+            Clear-Host
+            Write-Host "╔═══════════════════════════════════════════════════╗"
+            Write-Host "║            PowerShell Conversion Tool             ║"
+            Write-Host "╚═══════════════════════════════════════════════════╝"
+            Write-Host ""
+            [int]$C = Read-Host "Enter the temperature in Celsius that you want to convert to Fahrenheit"
+            $C2F = $C * 1.8 + 32
+            $F = [math]::Round($C2F,2)
+            Write-Host ""
+            Write-Host "$C° Celsius is $F° in Fahrenheit.""
             Write-Host ""
             }
         }
