@@ -59,4 +59,6 @@ Write-Host ""
 pause
 <#
 Created in compilation between Waking_Reality and Whobetter.
+Main scripting by Whobetter.
+Beautifying and sound by Waking_Reality.
 #>
