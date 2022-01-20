@@ -500,7 +500,7 @@ Press 'enter' or type 'y' and press 'enter' to continue' and type anything else 
             $C2F = $C * 1.8 + 32
             $F = [math]::Round($C2F,2)
             Write-Host ""
-            Write-Host "$C° Celsius is $F° in Fahrenheit.""
+            Write-Host "$C° Celsius is $F° in Fahrenheit."
             Write-Host ""
             }
         }
