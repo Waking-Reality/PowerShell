@@ -123,13 +123,13 @@ Start-Sleep -Seconds 1
 ############################################
 
 Write-Host""
-$Letter_1 = Read-Host "Enter the letter(s) for letter one"   #qwyisfjkzxcv
-$Letter_2 = Read-Host "Enter the letter(s) for letter two"   #qwyisfjkzxcv
-$Letter_3 = Read-Host "Enter the letter(s) for letter three" #qwysfjkzxcv
-$Letter_4 = Read-Host "Enter the letter(s) for letter four"  #qwyisfjkzxcv
-$Letter_5 = Read-Host "Enter the letter(s) for letter five"  #y
+$Letter_1 = Read-Host "Enter the letter(s) for letter one"
+$Letter_2 = Read-Host "Enter the letter(s) for letter two"
+$Letter_3 = Read-Host "Enter the letter(s) for letter three"
+$Letter_4 = Read-Host "Enter the letter(s) for letter four"
+$Letter_5 = Read-Host "Enter the letter(s) for letter five"
 Write-Host ""
-$Known_1 = Read-Host "Enter the first known letter or press 'ENTER'" #isy
+$Known_1 = Read-Host "Enter the first known letter or press 'ENTER'"
 $Known_2 = Read-Host "Enter the second known letter or press 'ENTER'"
 $Known_3 = Read-Host "Enter the third known letter or press 'ENTER'"
 $Known_4 = Read-Host "Enter the fourth known letter or press 'ENTER'"
