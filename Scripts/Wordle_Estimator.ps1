@@ -1,7 +1,7 @@
 ##########################################
 #                                        #
 # Created by Waking_Reality on 31JAN2022 #
-# Minor Additions by WhoBetter           #
+# Quality of life update by WhoBetter    #
 #                                        #
 ##########################################
 
