@@ -55,7 +55,9 @@ Write-Host "run out of them, press 'ENTER' to bypass that prompt.               
 Write-Host ""
 Write-Host "This tool will only help you estimate guesses and not necessarily solve the puzzle. Good luck!       "
 Write-Host ""
-Read-Host “Press 'ENTER' to continue...”
+Read-Host “Press 'ENTER' to continue after you have read the directions...”
+Write-Host ""
+$Puzzle = Read-Host "Enter the number for the Wordle puzzle you are working on"
 
 ####################################
 #                                  #
@@ -134,8 +136,6 @@ Write-Host "
 "
 Write-Host ""
 Write-Host "Note: You'll need to use [alt + tab] for this section."
-Write-Host ""
-$Puzzle = Read-Host "Enter the number for the Wordle puzzle you are working on"
 Write-Host""
 $Letter_1 = Read-Host "Enter the letter(s) for letter one"
 $Letter_2 = Read-Host "Enter the letter(s) for letter two"
