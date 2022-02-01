@@ -44,7 +44,7 @@ Write-Host "
      \/  \/   \____/|_|  \_\_____/|______|______|
 "
 Write-Host ""
-Write-Host "Directions: Take note of the letters that are in green and orange boxes. For the the "Leftover      `"
+Write-Host "Directions: Take note of the letters that are in green and orange boxes. For the the `"Leftover      "
 Write-Host "Letters`" section, enter all of the letters that are highlighted and enter them into each prompt. For"
 Write-Host "columns that have an orange box in them, enter all of the leftover letters except the ones in orange "
 Write-Host "boxes. For columns with a green box in them, only enter that letter on at the prompt. The columns are"
