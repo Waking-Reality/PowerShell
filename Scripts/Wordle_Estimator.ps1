@@ -179,14 +179,11 @@ Write-Host "
 "
 Write-Host ""
 Write-Host "The following guesses are probable answers:"
-Write-Host ""
 Get-Content C:\Wordle\Five_Word_List.txt | Select-String -Pattern $Letter_RegEx -AllMatches | Out-File C:\Wordle\Probable.txt
 Get-Content C:\Wordle\Probable.txt
 Write-Host "The following guesses are highly probable answers:"
-Write-Host ""
 Get-Content C:\Wordle\Probable.txt | Select-String -Pattern $Known_RegEx -NotMatch | Out-File C:\Wordle\HighlyProbable.txt
 Get-Content C:\Wordle\HighlyProbable.txt
-Write-Host ""
 Read-Host “Press 'ENTER' to continue...”
 
 #################
