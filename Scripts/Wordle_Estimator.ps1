@@ -179,11 +179,11 @@ $Letter_RegEx = "$Letter_1$Letter_2$Letter_3$Letter_4$Letter_5"
 $Known_RegEx = "[^$Known_1|$Known_2|$Known_3|$Known_4|$Known_5]"
 Start-Sleep -Seconds 5
 
-######################
-#                    #
-# It's one of these! #
-#                    #
-######################
+##################################
+#                                #
+# Hopefully it's one of these... #
+#                                #
+##################################
 
 Clear-Host
 Write-Host "
