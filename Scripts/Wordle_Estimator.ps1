@@ -56,7 +56,6 @@ Write-Host ""
 Write-Host "This tool will only help you estimate guesses and not necessarily solve the puzzle. Good luck!       "
 Write-Host ""
 Read-Host “Press 'ENTER' to continue after you have read the directions...”
-Write-Host ""
 $Puzzle = Read-Host "Enter the number for the Wordle puzzle you are working on"
 
 ####################################
