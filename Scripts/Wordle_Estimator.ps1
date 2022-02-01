@@ -43,7 +43,6 @@ Write-Host "
      \/  \/   \____/|_|  \_\_____/|______|______|
 "
 Write-Host ""
-Write-Host ""
 Write-Host "Directions: You'll see five squares per row. Each one will be either green, orange, or black. The    "
 Write-Host "Green is definite for that position, the orange is included in the puzzle, and the black is not      "
 Write-Host "included in the puzzle. For all of entries to follow, you will need to write down all of the letters "
@@ -123,13 +122,13 @@ Start-Sleep -Seconds 1
 ############################################
 
 Write-Host""
-$Letter_1 = Read-Host "Enter the letter(s) for letter one"
-$Letter_2 = Read-Host "Enter the letter(s) for letter two"
-$Letter_3 = Read-Host "Enter the letter(s) for letter three"
-$Letter_4 = Read-Host "Enter the letter(s) for letter four"
-$Letter_5 = Read-Host "Enter the letter(s) for letter five"
+$Letter_1 = Read-Host "Enter the letter(s) for letter one"   #qwyisfjkzxcv
+$Letter_2 = Read-Host "Enter the letter(s) for letter two"   #qwyisfjkzxcv
+$Letter_3 = Read-Host "Enter the letter(s) for letter three" #qwysfjkzxcv
+$Letter_4 = Read-Host "Enter the letter(s) for letter four"  #qwyisfjkzxcv
+$Letter_5 = Read-Host "Enter the letter(s) for letter five"  #y
 Write-Host ""
-$Known_1 = Read-Host "Enter the first known letter or press 'ENTER'"
+$Known_1 = Read-Host "Enter the first known letter or press 'ENTER'" #isy
 $Known_2 = Read-Host "Enter the second known letter or press 'ENTER'"
 $Known_3 = Read-Host "Enter the third known letter or press 'ENTER'"
 $Known_4 = Read-Host "Enter the fourth known letter or press 'ENTER'"
@@ -142,6 +141,16 @@ Write-Host ""
 #                           #
 #############################
 
+Clear-Host
+Write-Host "
+ __          ______  _____  _____  _      ______ 
+ \ \        / / __ \|  __ \|  __ \| |    |  ____|
+  \ \  /\  / / |  | | |__) | |  | | |    | |__   
+   \ \/  \/ /| |  | |  _  /| |  | | |    |  __|  
+    \  /\  / | |__| | | \ \| |__| | |____| |____ 
+     \/  \/   \____/|_|  \_\_____/|______|______|
+"
+Write-Host ""
 Write-Host "Searching the wordlist..."
 Write-Host ""
 $Letter_1 = "[$Letter_1]"
@@ -169,11 +178,14 @@ Write-Host "
      \/  \/   \____/|_|  \_\_____/|______|______|
 "
 Write-Host ""
-Write-Host ""
-Write-Host "The following are highly likely to be the answers you're looking for:"
+Write-Host "The following guesses are probable answers:"
 Write-Host ""
 Get-Content C:\Wordle\Five_Word_List.txt | Select-String -Pattern $Letter_RegEx -AllMatches | Out-File C:\Wordle\Probable.txt
-Get-Content C:\Wordle\Probable.txt | Select-String -Pattern $Known_RegEx -NotMatch
+Get-Content C:\Wordle\Probable.txt
+Write-Host "The following guesses are highly probable answers:"
+Write-Host ""
+Get-Content C:\Wordle\Probable.txt | Select-String -Pattern $Known_RegEx -NotMatch | Out-File C:\Wordle\HighlyProbable.txt
+Get-Content C:\Wordle\HighlyProbable.txt
 Write-Host ""
 Read-Host “Press 'ENTER' to continue...”
 
