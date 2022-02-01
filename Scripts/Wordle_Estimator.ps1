@@ -51,12 +51,11 @@ Write-Host "boxes. For columns with a green box in them, only enter that letter 
 Write-Host "numbered one through five from the left going right.                                                 "
 Write-Host ""
 Write-Host "For the `"Known Letters`" section, enter one unique letter that was leftover at each prompt. If you  "
-Write-Host "run out of them, press 'ENTER' to bypass that prompt. Good luck!                                     "
+Write-Host "run out of them, press 'ENTER' to bypass that prompt.                                                "
 Write-Host ""
-Write-Host "Note: You'll need to [alt + tab] for this section.                                                   "
+Write-Host "This tool will only help you estimate guesses and not necessarily solve the puzzle. Good luck!       "
 Write-Host ""
-
-$Puzzle = Read-Host "Enter the number for the Wordle puzzle you are working on" #2
+Read-Host “Press 'ENTER' to continue...”
 
 ####################################
 #                                  #
@@ -124,6 +123,19 @@ Start-Sleep -Seconds 1
 #                                          #
 ############################################
 
+Clear-Host
+Write-Host "
+ __          ______  _____  _____  _      ______ 
+ \ \        / / __ \|  __ \|  __ \| |    |  ____|
+  \ \  /\  / / |  | | |__) | |  | | |    | |__   
+   \ \/  \/ /| |  | |  _  /| |  | | |    |  __|  
+    \  /\  / | |__| | | \ \| |__| | |____| |____ 
+     \/  \/   \____/|_|  \_\_____/|______|______|
+"
+Write-Host ""
+Write-Host "Note: You'll need to use [alt + tab] for this section."
+Write-Host ""
+$Puzzle = Read-Host "Enter the number for the Wordle puzzle you are working on"
 Write-Host""
 $Letter_1 = Read-Host "Enter the letter(s) for letter one"
 $Letter_2 = Read-Host "Enter the letter(s) for letter two"
