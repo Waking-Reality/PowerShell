@@ -1,6 +1,7 @@
 ##########################################
 #                                        #
 # Created by Waking_Reality on 31JAN2022 #
+# Minor Additions by WhoBetter           #
 #                                        #
 ##########################################
 
@@ -43,18 +44,14 @@ Write-Host "
      \/  \/   \____/|_|  \_\_____/|______|______|
 "
 Write-Host ""
-Write-Host "Directions: You'll see five squares per row and each one will be either green, orange, or black/grey."
-Write-Host "When you look back at the puzzle, you will want to pay attention to the whole column. The Green is   "
-Write-Host "definite for that position, the orange is included in the puzzle, and the black/grey is not included "
-Write-Host "in the puzzle. For all of entries to follow, you will need to write down all of the letters and enter"
-Write-Host "them at each prompt. If there is a green box in the column, enter that letter at the prompt. If there"
-Write-Host "is an orange box, enter all of the remaining letters except the ones in orange boxes for that column "
-Write-Host "at the prompt. If there is a black/grey box for that column, enter all the remaining letters at the  "
-Write-Host "prompt. The letters can be found below the main puzzle in four colors, (green, orange, black, and    "
-Write-Host "grey). The ones that are not usable are in black. You may copy from the lines above and edit them as "
-Write-Host "needed for the remaining inputs. Regarding the known letters, enter one known letter per prompt and  "
-Write-Host "do not use a letter more than once. If you run out of known letters, just press enter through the    "
-Write-Host "remaining prompts. Good luck!                                                                        "
+Write-Host "Directions: Take note of the letters that are in green and orange boxes. For the the "Leftover      `"
+Write-Host "Letters`" section, enter all of the letters that are highlighted and enter them into each prompt. For"
+Write-Host "columns that have an orange box in them, enter all of the leftover letters except the ones in orange "
+Write-Host "boxes. For columns with a green box in them, only enter that letter on at the prompt. The columns are"
+Write-Host "numbered one through five from the left going right.                                                 "
+Write-Host ""
+Write-Host "For the `"Known Letters`" section, enter one unique letter that was leftover at each prompt. If you  "
+Write-Host "run out of them, press 'ENTER' to bypass that prompt. Good luck!                                     "
 Write-Host ""
 Write-Host "Note: You'll need to [alt + tab] for this section.                                                   "
 Write-Host ""
