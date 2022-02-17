@@ -1,1 +1,1 @@
-$WShell = New-Object -Com "Wscript.Shell"; while (1) {$WShell.SendKeys("{SCROLL}"); sleep -Milliseconds 1}
+$WShell = New-Object -Com "Wscript.Shell"; while (1) {$WShell.SendKeys("{SCROLLLOCK}"); sleep -Milliseconds 1}
