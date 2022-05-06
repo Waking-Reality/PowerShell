@@ -23,12 +23,16 @@ Write-Host ""
 
 pause
 
+<#
+
 $BaselineFolder = "[PATH]"
 $FileBaseline = @(Get-Content "$BaselineFolder\files.txt")
 $IPBaseline = @(Get-Content "$BaselineFolder\ips.txt")
 $HKCUBaseline = @(Get-Content "$BaselineFolder\reg-hkcu.txt")
 $HKLMBaseline = @(Get-Content "$BaselineFolder\reg-hklm.txt")
 $HKUBaseline = @(Get-Content "$BaselineFolder\reg-hcu.txt")
+
+#>
 
 Clear-Item WSMan:\localhost\Client\TrustedHosts -Force -ErrorAction SilentlyContinue
 Get-PSSession | Remove-PSSession -ErrorAction SilentlyContinue
@@ -37,8 +41,6 @@ Clear-Variable OtherConnectedHosts -ErrorAction SilentlyContinue
 Clear-Variable Sessions -ErrorAction SilentlyContinue
 Remove-Item C:\Investigation -Recurse -Force -ErrorAction SilentlyContinue
 New-Item C:\Investigation -ItemType Directory -Force -ErrorAction SilentlyContinue
-
-Clear-Host
 
 <#
 
@@ -193,33 +195,43 @@ Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object Name,Value
 ##### Setup to Run Scripts Remotely #####
 
 foreach ($OtherConnectedHost in $OtherConnectedHosts) {
-    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost
+    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
     Invoke-Command -ScriptBlock {Enable-PSRemoting -SkipNetworkProfileCheck -Force; Set-ExecutionPolicy -ExecutionPolicy Bypass -Force} -Session $SessionCreation
 }
 
 ##### Copy Script to Remote System #####
 
 foreach ($OtherConnectedHost in $OtherConnectedHosts) {
-    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost
+    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
     Copy-Item -ToSession $SessionCreation -Path C:\Windows_Enumeration.ps1 -Destination C:\
 }
 
 ##### Run Windows_Enumeration.ps1 Remotely #####
 
 foreach ($OtherConnectedHost in $OtherConnectedHosts) {
+    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
     Write-Host "========== $OtherConnectedHost =========="
-	Write-Host ""
-    Invoke-Command -ComputerName $OtherConnectedHost -ScriptBlock {C:\Windows_Enumeration.ps1}
+    Write-Host ""
+    Invoke-Command -Session $SessionCreation -ScriptBlock {C:\Windows_Enumeration.ps1}
 }
 
+Write-Host ""
+
 pause
+
+Write-Host ""
 
 ##### Copy Files from Remote System #####
 
 foreach ($OtherConnectedHost in $OtherConnectedHosts) {
-    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost
-    New-Item C:\Investigation\$OtherConnectedHost -ItemType Directory -Force
-    Copy-Item -FromSession $SessionCreation -Path C:\Investigation\* -Destination C:\Investigation\$OtherConnectedHost
+    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
+    Copy-Item -FromSession $SessionCreation -Path C:\Investigation -Recurse -Destination C:\Investigation\$OtherConnectedHost
+}
+
+foreach ($OtherConnectedHost in $OtherConnectedHosts) {
+    $LocalIP = (Test-Connection $env:COMPUTERNAME -Count 1).IPV4Address
+    Write-Output $LocalIP.IPAddressToString | Out-File C:\Investigation\$OtherConnectedHost\Network_Connected_Processes\Analyst_IP.txt
+    Write-Output $LocalIP.IPAddressToString | Out-File C:\Investigation\$OtherConnectedHost\Network_Statistics\Analyst_IP.txt
 }
 
 <#
@@ -227,8 +239,6 @@ foreach ($OtherConnectedHost in $OtherConnectedHosts) {
 Enable this section to compare items against IOCs...
 
 #>
-
-Clear-Host
 
 <#
 
