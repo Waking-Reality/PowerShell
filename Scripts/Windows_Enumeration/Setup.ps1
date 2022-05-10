@@ -1,18 +1,13 @@
 Clear-Host
 
 <#
-
 These functions were written by Boe Prox, (https://github.com/proxb):
-
 Ping-Subnet
 Test-ConnectionAsync
-
 #>
 
 <#
-
 Setting up things...
-
 #>
 
 Clear-Item WSMan:\localhost\Client\TrustedHosts -Force -ErrorAction SilentlyContinue
@@ -24,9 +19,7 @@ Remove-Item C:\Investigation -Recurse -Force -ErrorAction SilentlyContinue
 New-Item C:\Investigation -ItemType Directory -Force -ErrorAction SilentlyContinue
 
 <#
-
 Finding all of the hosts...
-
 #>
 
 $OtherConnectedHosts =@()
@@ -207,7 +200,7 @@ Write-Host ""
 foreach ($OtherConnectedHost in $OtherConnectedHosts) {
     $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
     New-Item C:\Investigation\$OtherConnectedHost -ItemType Directory -Force
-    Copy-Item -FromSession $SessionCreation -Path C:\Investigation -Recurse -Destination C:\Investigation\$OtherConnectedHost
+    Copy-Item -FromSession $SessionCreation -Path C:\Investigation\* -Recurse -Destination C:\Investigation\$OtherConnectedHost
 }
 
 foreach ($OtherConnectedHost in $OtherConnectedHosts) {
