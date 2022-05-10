@@ -15,25 +15,6 @@ Setting up things...
 
 #>
 
-Write-Host ""
-Write-Host "If you want to use the IOC comparing stuff, uncomment that section and update the baseline variables." -BackgroundColor Black -ForegroundColor DarkYellow
-Write-Host ""
-Write-Host "[CTRL] + [C] to cancel and update the script." -BackgroundColor Black -ForegroundColor DarkYellow
-Write-Host ""
-
-pause
-
-<#
-
-$BaselineFolder = "[PATH]"
-$FileBaseline = @(Get-Content "$BaselineFolder\files.txt")
-$IPBaseline = @(Get-Content "$BaselineFolder\ips.txt")
-$HKCUBaseline = @(Get-Content "$BaselineFolder\reg-hkcu.txt")
-$HKLMBaseline = @(Get-Content "$BaselineFolder\reg-hklm.txt")
-$HKUBaseline = @(Get-Content "$BaselineFolder\reg-hcu.txt")
-
-#>
-
 Clear-Item WSMan:\localhost\Client\TrustedHosts -Force -ErrorAction SilentlyContinue
 Get-PSSession | Remove-PSSession -ErrorAction SilentlyContinue
 Clear-Variable ConnectedHosts -ErrorAction SilentlyContinue
@@ -234,63 +215,5 @@ foreach ($OtherConnectedHost in $OtherConnectedHosts) {
     Write-Output $LocalIP.IPAddressToString | Out-File C:\Investigation\$OtherConnectedHost\Network_Connected_Processes\Analyst_IP.txt
     Write-Output $LocalIP.IPAddressToString | Out-File C:\Investigation\$OtherConnectedHost\Network_Statistics\Analyst_IP.txt
 }
-
-<#
-
-Enable this section to compare items against IOCs...
-
-#>
-
-<#
-
-foreach ($OtherConnectedHost in $OtherConnectedHosts) {
-
-    New-Item C:\Investigation\$OtherConnectedHost\Found -ItemType Directory -Force
-
-    Write-Host ""
-    Write-Host "Looking for FILE IOCs from $OtherConnectedHost..." -BackgroundColor Black -ForegroundColor DarkGreen
-    
-    foreach ($File in $FileBaseline) {
-        Get-Content C:\Investigation\$OtherConnectedHost\Files.txt | Select-String $File | Out-File C:\Investigation\$OtherConnectedHost\Found\Files.txt -Append
-    }
-    
-    Write-Host "Looking for IP IOCs from $OtherConnectedHost..." -BackgroundColor Black -ForegroundColor DarkGreen
-    
-    foreach ($IP in $IPBaseline) {
-            Get-Content C:\Investigation\$OtherConnectedHost\Network_Statistics.txt | Select-String $IP | Out-File C:\Investigation\$OtherConnectedHost\Found\IPs.txt -Append
-    }
-    
-    Write-Host "Looking for HKCU IOCs from $OtherConnectedHost" -BackgroundColor Black -ForegroundColor DarkGreen
-    
-    foreach ($HKCU in $HKCUBaseline) {
-        Get-Content C:\Investigation\$OtherConnectedHost\HKCU-Registry.txt | Select-String $HKCU | Out-File C:\Investigation\$OtherConnectedHost\Found\HKCU.txt -Append
-    }
-
-    Write-Host "Looking for HKLM IOCs from $OtherConnectedHost..." -BackgroundColor Black -ForegroundColor DarkGreen
-
-    foreach ($HKLM in $HKLMBaseline) {
-        Get-Content C:\Investigation\$OtherConnectedHost\HKCU-Registry.txt | Select-String $HKLM | Out-File C:\Investigation\$OtherConnectedHost\Found\HKLM.txt -Append
-    }
-}
-
-Start-Sleep -Seconds 1
-
-Clear-Host
-
-foreach ($OtherConnectedHost in $OtherConnectedHosts) {
-    Write-Host ""
-    Write-Host "========== $OtherConnectedHost ==========" -BackgroundColor Black -ForegroundColor DarkYellow
-    Write-Host ""
-    Write-Host "===== FILES =====" -BackgroundColor Black -ForegroundColor DarkYellow
-    Get-Content C:\Investigation\$OtherConnectedHost\Found\File_Names.txt
-    Write-Host "===== IPS =====" -BackgroundColor Black -ForegroundColor DarkYellow
-    Get-Content C:\Investigation\$OtherConnectedHost\Found\IPs.txt
-    Write-Host "===== HKCU =====" -BackgroundColor Black -ForegroundColor DarkYellow
-    Get-Content C:\Investigation\$OtherConnectedHost\Found\HKCU.txt
-    Write-Host "===== HKLM =====" -BackgroundColor Black -ForegroundColor DarkYellow
-    Get-Content C:\Investigation\$OtherConnectedHost\Found\HKLM.txt
-}
-
-#>
 
 Start-Process C:\Investigation\
