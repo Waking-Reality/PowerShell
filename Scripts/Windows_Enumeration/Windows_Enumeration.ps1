@@ -50,14 +50,6 @@ Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue -File | For
 (Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue -File).FullName | ForEach-Object {Get-FileHash -Algorithm MD5 "$_" -ErrorAction SilentlyContinue | Format-List Hash,Path} | Out-File "C:\Investigation\Files\MD5_File_Hashes.txt"
 (Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue -File).FullName | ForEach-Object {Get-FileHash -Algorithm SHA1 "$_" -ErrorAction SilentlyContinue | Format-List Hash,Path} | Out-File "C:\Investigation\Files\SHA1_File_Hashes.txt"
 
-<#
-
-This will search at the line of the string and five lines past...
-
-Get-Content [FILE] | Select-String -Pattern "desktop.ini" -Context 0,4
-
-#>
-
 ##### HKCU Run Key #####
 
 New-Item C:\Investigation\Registry -ItemType Directory -Force -ErrorAction SilentlyContinue
