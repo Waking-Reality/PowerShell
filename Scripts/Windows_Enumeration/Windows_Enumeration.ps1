@@ -13,15 +13,6 @@ New-Item C:\Investigation -ItemType Directory -Force -ErrorAction SilentlyContin
 New-Item C:\Investigation\Alternate_Data_Streams -ItemType Directory -Force -ErrorAction SilentlyContinue
 (((Get-ChildItem C:\Users -Recurse -ErrorAction SilentlyContinue).FullName | ForEach-Object {Get-Item $_ -Stream * -ErrorAction SilentlyContinue}) | Where-Object {$_.Stream -ne ':$DATA'} | Where-Object {$_.Stream -ne 'Zone.Identifier'}) | Format-Table PSPath -AutoSize -HideTableHeaders | Out-File C:\Investigation\Alternate_Data_Streams\ADS.txt
 
-<#
-
-$MainFile = ".\Test.txt:Test"
-$ADSFile = "Test"
-Set-Content $ADSFile -Encoding Byte -Value $MainFile
-Format-Hex $ADSFile | Select-Object -First 10
-
-#>
-
 ##### ARP Cache #####
 
 New-Item C:\Investigation\ARP_Cache -ItemType Directory -Force -ErrorAction SilentlyContinue
