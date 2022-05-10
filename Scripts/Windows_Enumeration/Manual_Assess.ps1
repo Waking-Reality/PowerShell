@@ -1,9 +1,13 @@
-########## Local ADS Analysis ##########
+########## ADS ##########
 
 $MainFile = ".\[FILE]:[STREAM]"
 $ADSFile = "[ADS_FILE]"
 Set-Content $ADSFile -Encoding Byte -Value $MainFile
 Format-Hex $ADSFile | Select-Object -First 10
+
+########## File Grep +5 ##########
+
+Get-Content [FILE] | Select-String -Pattern "[STRING]" -Context 0,4
 
 ########## General Analysis: IOCs ##########
 
