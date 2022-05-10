@@ -1,5 +1,6 @@
 Good Day,
 
+You should have all of the scripts in C:\ as this is how I have wrtten the script to be.
 This set of scripts were tested with WinRM and Windows Firewall turned off for remote testing.
 Windows_Enumeration.ps1 can be run on any host with at least Windows PowerShell 5.1 to complete all of the inital investigation items.
 Manual analysis will need to be completed following this.
