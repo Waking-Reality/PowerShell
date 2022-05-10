@@ -107,6 +107,10 @@ foreach ($IOC in $TrustedWinRMBaseline) {
 	Get-Content $TrustedWinRMRemote | Select-String $IOC | Out-File C:\Investigation\$OtherConnectedHost\Found\Trusted_WinRM.txt -Append
 }
 
+########## Hex Dump ##########
+
+Format-Hex [FILE] | Select-Object -First 10
+
 ########## Log Analysis: Privilege Escalation ##########
 
 Get-WinEvent -Oldest | Where-Object {$_.id -eq 4728 -or $_.id -eq 4732 -or $_.id -eq 4756} | Select-Object -Last 1  | Select-Object -ExpandProperty message
