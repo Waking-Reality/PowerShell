@@ -225,6 +225,7 @@ Write-Host ""
 
 foreach ($OtherConnectedHost in $OtherConnectedHosts) {
     $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
+    New-Item C:\Investigation\$OtherConnectedHost -ItemType Directory -Force
     Copy-Item -FromSession $SessionCreation -Path C:\Investigation -Recurse -Destination C:\Investigation\$OtherConnectedHost
 }
 
