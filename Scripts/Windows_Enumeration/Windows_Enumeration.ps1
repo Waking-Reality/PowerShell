@@ -8,7 +8,7 @@ Remove-Item C:\Investigation -Force -Recurse -ErrorAction SilentlyContinue
 
 New-Item C:\Investigation -ItemType Directory -Force -ErrorAction SilentlyContinue
 
-##### Alternate Data Streams ##### ****************************
+##### Alternate Data Streams #####
 
 New-Item C:\Investigation\Alternate_Data_Streams -ItemType Directory -Force -ErrorAction SilentlyContinue
 (((Get-ChildItem C:\Users -Recurse -ErrorAction SilentlyContinue).FullName | ForEach-Object {Get-Item $_ -Stream * -ErrorAction SilentlyContinue}) | Where-Object {$_.Stream -ne ':$DATA'} | Where-Object {$_.Stream -ne 'Zone.Identifier'}) | Format-Table PSPath -AutoSize -HideTableHeaders | Out-File C:\Investigation\Alternate_Data_Streams\ADS.txt
