@@ -1,137 +1,212 @@
-$FormatEnumerationLimit = -1
+Clear-Host
 
-##### Remove the Investigation Folder #####
+<#
+These functions were written by Boe Prox, (https://github.com/proxb):
+Ping-Subnet
+Test-ConnectionAsync
+#>
 
-Remove-Item C:\Investigation -Force -Recurse -ErrorAction SilentlyContinue
+<#
+Setting up things...
+#>
 
-##### Create the Investigation Folder #####
-
+Clear-Item WSMan:\localhost\Client\TrustedHosts -Force -ErrorAction SilentlyContinue
+Get-PSSession | Remove-PSSession -ErrorAction SilentlyContinue
+Clear-Variable ConnectedHosts -ErrorAction SilentlyContinue
+Clear-Variable OtherConnectedHosts -ErrorAction SilentlyContinue
+Clear-Variable Sessions -ErrorAction SilentlyContinue
+Remove-Item C:\Investigation -Recurse -Force -ErrorAction SilentlyContinue
 New-Item C:\Investigation -ItemType Directory -Force -ErrorAction SilentlyContinue
 
-##### Alternate Data Streams ##### ****************************
-
-New-Item C:\Investigation\Alternate_Data_Streams -ItemType Directory -Force -ErrorAction SilentlyContinue
-(((Get-ChildItem C:\Users -Recurse -ErrorAction SilentlyContinue).FullName | ForEach-Object {Get-Item $_ -Stream * -ErrorAction SilentlyContinue}) | Where-Object {$_.Stream -ne ':$DATA'} | Where-Object {$_.Stream -ne 'Zone.Identifier'}) | Format-Table PSPath -AutoSize -HideTableHeaders | Out-File C:\Investigation\Alternate_Data_Streams\ADS.txt
-
 <#
-
-$MainFile = ".\Test.txt:Test"
-$ADSFile = "Test"
-Set-Content $ADSFile -Encoding Byte -Value $MainFile
-Format-Hex $ADSFile | Select-Object -First 10
-
+Finding all of the hosts...
 #>
 
-##### ARP Cache #####
+$OtherConnectedHosts =@()
+Set-ExecutionPolicy -ExecutionPolicy Bypass -Force -ErrorAction SilentlyContinue
 
-New-Item C:\Investigation\ARP_Cache -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-NetNeighbor | Select-Object IPAddress,LinkLayerAddress,State -Unique | Out-File C:\Investigation\ARP_Cache\ARP_Cache.txt
+Function Ping-Subnet{  
+    [cmdletbinding()]
+    Param(
+          # Subnet to ping (optional)
+          [Parameter(ValueFromPipelineByPropertyName=$true, Position=0)]
+          [ValidateScript({$_ -match [IPAddress]$_ })]  
+          [String]$Subnet,
 
-##### Current Processes #####
+          # Show Successful or Failed
+          [ValidateSet('Success', 'TimedOut')]
+          [String]$Result = 'Success'
+          )
 
-New-Item C:\Investigation\Current_Processes -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-Process | Select-Object Name,Path -Unique | Out-File C:\Investigation\Current_Processes\Current_Processes.txt
+    Begin{ 
+        If (-Not($subnet)){
+            Write-Verbose "Checking OS Version"
+        If(([System.Version] (Get-CimInstance -ClassName Win32_OperatingSystem).Version) -ge [System.Version] 6.2){
+                Write-Verbose "Checking local subnet"
+                $myIP = Get-NetIPConfiguration | Select IPv4Address
+                $octect = $myIP.IPv4Address.IPv4Address -split "\." # backslash is escape char
+                }
+            Else{
+                Write-Warning "On your version of Windows you need to supply a value for the -Subnet parameter `n
+                Example: `n
+                PS C:\> Ping-Subnet -subnet 172.26.75.0"
+                break
+                }
+            }
+        Else{ 
+            Write-Verbose "Parameter subnet set to $subnet"
+            $octect = $subnet -split "\."
+            Write-Verbose "$subnet split into $octect"
+            }     
+         
+    }
 
-##### Current Services #####
+    Process{
+                        
+        $range = for ($i = 1; $i -lt 255; $i += 1){
+                [PSCustomObject]@{
+                    testIP = "$($octect.Item(0)).$($octect.Item(1)).$($octect.Item(2)).$($i)"
+                    }
+        }         
 
-New-Item C:\Investigation\Current_Services -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-WmiObject -Class Win32_Service | Select-Object DisplayName,State,StartMode,PathName | Out-File C:\Investigation\Current_Services\Current_Services.txt
-
-##### DNS Cache #####
-
-New-Item C:\Investigation\DNS_Cache -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-DnsClientCache | Select-Object Name,Data | Sort-Object Name -Unique | Where-Object {$_.Name -replace ' ',$null} | Out-File C:\Investigation\DNS_Cache\DNS_Cache.txt
-
-##### ETC Hosts #####
-
-New-Item C:\Investigation\ETC_Hosts -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-Content C:\Windows\System32\drivers\etc\hosts | Out-File C:\Investigation\ETC_Hosts\ETC_Hosts.txt
-
-##### Event Logs #####
-
-New-Item C:\Investigation\Event_Logs -ItemType Directory -Force -ErrorAction SilentlyContinue
-(Get-ChildItem C:\Windows\System32\winevt\Logs).FullName | ForEach-Object {Copy-Item $_ -Destination C:\Investigation\Event_Logs\}
-
-##### Files #####
-
-New-Item C:\Investigation\Files -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue -File | Format-List FullName,CreationTime,LastAccessTime,LastWriteTime | Out-File "C:\Investigation\Files\File_Names.txt"
-(Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue -File).FullName | ForEach-Object {Get-FileHash -Algorithm MD5 "$_" -ErrorAction SilentlyContinue | Format-List Hash,Path} | Out-File "C:\Investigation\Files\MD5_File_Hashes.txt"
-(Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue -File).FullName | ForEach-Object {Get-FileHash -Algorithm SHA1 "$_" -ErrorAction SilentlyContinue | Format-List Hash,Path} | Out-File "C:\Investigation\Files\SHA1_File_Hashes.txt"
-
-<#
-
-This will search at the line of the string and five lines past...
-
-Get-Content [FILE] | Select-String -Pattern "desktop.ini" -Context 0,4
-
-#>
-
-##### HKCU Run Key #####
-
-New-Item C:\Investigation\Registry -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-Item Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -ErrorAction SilentlyContinue | Out-File "C:\Investigation\Registry\HKCU-Registry.txt"
-
-##### HKLM Run Key #####
-
-Get-Item Registry::HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -ErrorAction SilentlyContinue | Out-File "C:\Investigation\Registry\HKLM-Registry.txt"
-
-##### HKU Run Key #####
-
-Get-Item Registry::HKEY_USERS\*\SOFTWARE\Microsoft\Windows\CurrentVersion\Run -ErrorAction SilentlyContinue  | Out-File "C:\Investigation\Registry\HKU-Registry.txt"
-
-##### Local Groups #####
-
-New-Item C:\Investigation\Local_Groups -ItemType Directory -Force -ErrorAction SilentlyContinue
-
-Get-LocalGroup | Select-Object Name | Sort-Object Name | Format-Table -HideTableHeaders | Out-File C:\Investigation\Local_Groups\Local_Groups.txt
-$LocalGroups = @((Get-Localgroup).Name)
-foreach ($LocalGroup in $LocalGroups){
-    Write-Output "========== $LocalGroup ==========" | Out-File C:\Investigation\Local_Groups\Local_Group_Members.txt -Append
-    Write-Output "" | Out-File C:\Investigation\Local_Groups\Local_Group_Members.txt -Append
-    (Get-LocalGroupMember -Group $LocalGroup).Name | Out-File C:\Investigation\Local_Groups\Local_Group_Members.txt -Append
-    Write-Output "" | Out-File C:\Investigation\Local_Groups\Local_Group_Members.txt -Append
+        Write-Verbose "Range to be scanned is $($range.testip)"
+        Test-ConnectionAsync -Computer $range.testip -TimeToLive 2000 | select computername, result | where result -eq $result
+       
+    }
+} 
+Function Test-ConnectionAsync {
+    [OutputType('Net.AsyncPingResult')]
+    [cmdletbinding()]
+    Param (
+        [parameter(ValueFromPipeline=$True)]
+        [string[]]$Computername,
+        [parameter()]
+        [int32]$Timeout = 100,
+        [parameter()]
+        [Alias('Ttl')]
+        [int32]$TimeToLive = 128,
+        [parameter()]
+        [switch]$Fragment,
+        [parameter()]
+        [byte[]]$Buffer
+    )
+    Begin {
+        
+        If (-NOT $PSBoundParameters.ContainsKey('Buffer')) {
+            $Buffer = 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f, 
+            0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69
+        }
+        $PingOptions = New-Object System.Net.NetworkInformation.PingOptions
+        $PingOptions.Ttl = $TimeToLive
+        If (-NOT $PSBoundParameters.ContainsKey('Fragment')) {
+            $Fragment = $False
+        }
+        $PingOptions.DontFragment = $Fragment
+        $Computerlist = New-Object System.Collections.ArrayList
+        If ($PSBoundParameters.ContainsKey('Computername')) {
+            [void]$Computerlist.AddRange($Computername)
+        } Else {
+            $IsPipeline = $True
+        }
+    }
+    Process {
+        If ($IsPipeline) {
+            [void]$Computerlist.Add($Computername)
+        }
+    }
+    End {
+        $Task = ForEach ($Computer in $Computername) {
+            [pscustomobject] @{
+                Computername = $Computer
+                Task = (New-Object System.Net.NetworkInformation.Ping).SendPingAsync($Computer,$Timeout, $Buffer, $PingOptions)
+            }
+        }        
+        Try {
+            [void][Threading.Tasks.Task]::WaitAll($Task.Task)
+        } Catch {}
+        $Task | ForEach {
+            If ($_.Task.IsFaulted) {
+                $Result = $_.Task.Exception.InnerException.InnerException.Message
+                $IPAddress = $Null
+            } Else {
+                $Result = $_.Task.Result.Status
+                $IPAddress = $_.task.Result.Address.ToString()
+            }
+            $Object = [pscustomobject]@{
+                Computername = $_.Computername
+                IPAddress = $IPAddress
+                Result = $Result
+            }
+            $Object.pstypenames.insert(0,'Net.AsyncPingResult')
+            $Object
+        }
+    }
 }
 
-##### Local Users #####
+Write-Host ""
+Write-Host "Local IP Address:" (Test-Connection $env:COMPUTERNAME -Count 1).IPV4Address
+Write-Host ""
+Write-Host "Local Subnet:"
+Write-Host ""
 
-New-Item C:\Investigation\Local_Users -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-LocalUser | Select-Object Name,SID | Sort-Object Name | Out-File C:\Investigation\Local_Users\Local_Users.txt
+(Ping-Subnet).ComputerName
 
-##### Network Connected Processes #####
+$ConnectedHosts =@((Ping-Subnet).ComputerName)
 
-$LocalIP = (Test-Connection $env:COMPUTERNAME -Count 1).IPV4Address
-New-Item C:\Investigation\Network_Connected_Processes -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-NetTCPConnection | Select-Object LocalAddress,LocalPort,RemoteAddress,RemotePort,OwningProcess | Where-Object {$_.RemoteAddress -ne $LocalIP} |Where-Object {$_.RemoteAddress -ne '0.0.0.0'} | Where-Object {$_.RemoteAddress -ne '::'} | Where-Object {$_.RemoteAddress -ne '::1'} | Sort-Object OwningProcess | Format-Table -AutoSize | Out-File C:\Investigation\Network_Connected_Processes\Network_Connected_Process_IDs.txt
-((Get-NetTCPConnection).OwningProcess | Sort-Object -Unique) | ForEach-Object {Get-Process -Id $_ | Select-Object Id,ProcessName | Sort-Object Id} | Out-File C:\Investigation\Network_Connected_Processes\Network_Connected_Process_Names.txt
-
-##### Network Statistics #####
-
-New-Item C:\Investigation\Network_Statistics -ItemType Directory -Force -ErrorAction SilentlyContinue
-(Get-NetTCPConnection).RemoteAddress | Where-Object {$_.RemoteAddress -ne $LocalIP} | Where-Object {$_ -ne '0.0.0.0'} | Where-Object {$_ -ne '::'} | Where-Object {$_ -ne '::1'} | Sort-Object -Unique | Out-File "C:\Investigation\Network_Statistics\Network_Statistics.txt"
-
-##### Prefetch Files #####
-
-New-Item C:\Investigation\Prefetch_Files -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-ChildItem C:\Windows\Prefetch | Select-Object FullName,CreationTime,LastAccessTime,LastWriteTime | Sort-Object LastWriteTime -Descending | Out-File C:\Investigation\Prefetch_Files\Prefetch_Files.txt
-
-##### Scheduled Tasks #####
-
-New-Item C:\Investigation\Scheduled_Tasks -ItemType Directory -Force -ErrorAction SilentlyContinue
-SCHTASKS /QUERY | Out-File C:\Investigation\Scheduled_Tasks\Scheduled_Tasks.txt
-$ScheduledTaskFiles = @((Get-ChildItem C:\Windows\System32\Tasks -Recurse -Force -ErrorAction SilentlyContinue -File).FullName)
-foreach ($ScheduledTaskFile in $ScheduledTaskFiles) {
-    Write-Output "=============== $ScheduledTaskFile ===============" | Out-File C:\Investigation\Scheduled_Tasks\Scheduled_Task_Files.txt -Append
-    Write-Output "" | Out-File C:\Investigation\Scheduled_Tasks\Scheduled_Task_Files.txt -Append
-    Get-Content $ScheduledTaskFile -Force -ErrorAction SilentlyContinue| Select-String "<Command>" -Context 0,1 | Out-File C:\Investigation\Scheduled_Tasks\Scheduled_Task_Files.txt -Append
+foreach ($ConnectedHost in $ConnectedHosts) {
+    if ($ConnectedHost -eq (Test-Connection $env:COMPUTERNAME -Count 1).IPV4Address) {}
+    else {
+        $OtherConnectedHosts = $OtherConnectedHosts + $ConnectedHost 
+    }
 }
 
-##### SMB Shares #####
+foreach ($OtherConnectedHost in $OtherConnectedHosts) {
+    Set-Item WSMan:\localhost\Client\TrustedHosts -Value $OtherConnectedHost -Concatenate -Force
+}
 
-New-Item C:\Investigation\SMB_Shares -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-SmbShare | Out-File C:\Investigation\SMB_Shares\SMB_Shares.txt
+Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object Name,Value
 
-##### Trusted WinRM #####
+##### Setup to Run Scripts Remotely #####
 
-New-Item C:\Investigation\Trusted_WinRM -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object Value | Format-Table -HideTableHeaders | Out-File C:\Investigation\Trusted_WinRM\Trusted_WinRM.txt
+foreach ($OtherConnectedHost in $OtherConnectedHosts) {
+    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
+    Invoke-Command -ScriptBlock {Enable-PSRemoting -SkipNetworkProfileCheck -Force; Set-ExecutionPolicy -ExecutionPolicy Bypass -Force} -Session $SessionCreation
+}
+
+##### Copy Script to Remote System #####
+
+foreach ($OtherConnectedHost in $OtherConnectedHosts) {
+    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
+    Copy-Item -ToSession $SessionCreation -Path C:\Windows_Enumeration.ps1 -Destination C:\
+}
+
+##### Run Windows_Enumeration.ps1 Remotely #####
+
+foreach ($OtherConnectedHost in $OtherConnectedHosts) {
+    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
+    Write-Host "========== $OtherConnectedHost =========="
+    Write-Host ""
+    Invoke-Command -Session $SessionCreation -ScriptBlock {C:\Windows_Enumeration.ps1}
+}
+
+Write-Host ""
+
+pause
+
+Write-Host ""
+
+##### Copy Files from Remote System #####
+
+foreach ($OtherConnectedHost in $OtherConnectedHosts) {
+    $SessionCreation = New-PSSession -ComputerName $OtherConnectedHost #-Credential Administrator #N@n0S3rveP@ssw0rd
+    New-Item C:\Investigation\$OtherConnectedHost -ItemType Directory -Force
+    Copy-Item -FromSession $SessionCreation -Path C:\Investigation\* -Recurse -Destination C:\Investigation\$OtherConnectedHost
+}
+
+foreach ($OtherConnectedHost in $OtherConnectedHosts) {
+    $LocalIP = (Test-Connection $env:COMPUTERNAME -Count 1).IPV4Address
+    Write-Output $LocalIP.IPAddressToString | Out-File C:\Investigation\$OtherConnectedHost\Network_Connected_Processes\Analyst_IP.txt
+    Write-Output $LocalIP.IPAddressToString | Out-File C:\Investigation\$OtherConnectedHost\Network_Statistics\Analyst_IP.txt
+}
+
+Start-Process C:\Investigation\
