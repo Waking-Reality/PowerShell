@@ -231,3 +231,5 @@ Get-WinEvent -Path "C:\Investigation\Event_Logs\Security.evtx" -Oldest | Where-O
 ########## Timeline Analysis ##########
 
 Get-ChildItem -Path C:\ -Recurse -Force -ErrorAction SilentlyContinue | Where-Object {$_.CreationTime -gt ((Get-ChildItem '[PATH-TO-IOC]').CreationTime).AddMinutes(-2) -and $_.CreationTime -lt ((Get-ChildItem '[PATH-TO-IOC]').CreationTime).AddMinutes(2)} | Select-Object FullName,CreationTime
+
+# '-Recurse -Force' can be replaced with '-Depth 5' for brevity.
