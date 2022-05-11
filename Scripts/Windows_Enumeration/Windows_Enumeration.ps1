@@ -167,7 +167,7 @@ New-Item C:\Investigation\Alternate_Data_Streams -ItemType Directory -Force -Err
 
 #>
 
-<##### ARP Cache #####
+<##### Address Resolution Protocol Cache #####
 
 New-Item C:\Investigation\ARP_Cache -ItemType Directory -Force -ErrorAction SilentlyContinue
 Get-NetNeighbor | Select-Object IPAddress,LinkLayerAddress,State -Unique | Out-File C:\Investigation\ARP_Cache\ARP_Cache.txt
@@ -195,7 +195,7 @@ Get-WmiObject -Class Win32_Service | Select-Object DisplayName,State,StartMode,P
 
 #>
 
-<##### DNS Cache #####
+<##### Domain Name Service Cache #####
 
 New-Item C:\Investigation\DNS_Cache -ItemType Directory -Force -ErrorAction SilentlyContinue
 Get-DnsClientCache | Select-Object Name,Data | Sort-Object Name -Unique | Where-Object {$_.Name -replace ' ',$null} | Out-File C:\Investigation\DNS_Cache\DNS_Cache.txt
@@ -308,14 +308,14 @@ foreach ($ScheduledTaskFile in $ScheduledTaskFiles) {
 
 #>
 
-<##### SMB Shares #####
+<##### Server Message Block Shares #####
 
 New-Item C:\Investigation\SMB_Shares -ItemType Directory -Force -ErrorAction SilentlyContinue
 Get-SmbShare | Out-File C:\Investigation\SMB_Shares\SMB_Shares.txt
 
 #>
 
-<##### Trusted WinRM #####
+<##### Trusted Windows Remote Management Clients #####
 
 New-Item C:\Investigation\Trusted_WinRM -ItemType Directory -Force -ErrorAction SilentlyContinue
 Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object Value | Format-Table -HideTableHeaders | Out-File C:\Investigation\Trusted_WinRM\Trusted_WinRM.txt
