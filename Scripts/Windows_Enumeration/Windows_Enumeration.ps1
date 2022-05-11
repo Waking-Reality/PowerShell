@@ -222,6 +222,11 @@ New-Item C:\Investigation\Files -ItemType Directory -Force -ErrorAction Silently
 Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue -File | Format-List FullName,CreationTime,LastAccessTime,LastWriteTime | Out-File "C:\Investigation\Files\File_Names.txt"
 (Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue -File).FullName | ForEach-Object {Get-FileHash -Algorithm MD5 "$_" -ErrorAction SilentlyContinue | Format-List Hash,Path} | Out-File "C:\Investigation\Files\MD5_File_Hashes.txt"
 (Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue -File).FullName | ForEach-Object {Get-FileHash -Algorithm SHA1 "$_" -ErrorAction SilentlyContinue | Format-List Hash,Path} | Out-File "C:\Investigation\Files\SHA1_File_Hashes.txt"
+
+#>
+
+<##### Files: Access Control Lists (THIS TAKES A LONG TIME; 25+ MINUTES IN TESTING) #####
+
 $ACLs = @((Get-ChildItem C:\Users -Recurse -Force -ErrorAction SilentlyContinue).FullName)
 
 foreach ($ACL in $ACLs) {
