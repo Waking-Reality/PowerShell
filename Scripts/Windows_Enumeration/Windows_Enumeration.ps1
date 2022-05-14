@@ -191,7 +191,7 @@ Get-Process | Select-Object Name,Path -Unique | Out-File C:\Investigation\Curren
 <##### Current Services #####
 
 New-Item C:\Investigation\Current_Services -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-WmiObject -Class Win32_Service | Select-Object DisplayName,State,StartMode,PathName | Out-File C:\Investigation\Current_Services\Current_Services.txt
+Get-WmiObject -Class Win32_Service | Select-Object DisplayName,State,StartMode,PathName | Format-List | Out-File C:\Investigation\Current_Services\Current_Services.txt
 
 #>
 
