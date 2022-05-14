@@ -318,7 +318,15 @@ Get-SmbShare | Out-File C:\Investigation\SMB_Shares\SMB_Shares.txt
 <##### Trusted Windows Remote Management Clients #####
 
 New-Item C:\Investigation\Trusted_WinRM -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object Value | Format-Table -HideTableHeaders | Out-File C:\Investigation\Trusted_WinRM\Trusted_WinRM.txt
+$WinRMStatus = (Get-Service WinRM).Status
+if ($WinRMStatus -eq "Stopped") {
+    Start-Service WinRM
+    Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object Value | Format-Table -HideTableHeaders | Out-File C:\Investigation\Trusted_WinRM\Trusted_WinRM.txt
+    Stop-Service WinRM
+}
+else {
+    Get-Item WSMan:\localhost\Client\TrustedHosts | Select-Object Value | Format-Table -HideTableHeaders | Out-File C:\Investigation\Trusted_WinRM\Trusted_WinRM.txt
+}
 
 #>
 
