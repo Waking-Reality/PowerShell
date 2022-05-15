@@ -276,7 +276,7 @@ net accounts | Out-File C:\Investigation\Local_Users\Password_Policies.txt
 
 $LocalIP = ((Get-WmiObject -Class Win32_NetworkAdapterConfiguration | where {$_.DHCPEnabled -ne $null -and $_.DefaultIPGateway -ne $null}).IPAddress | Select-Object -First 1)
 New-Item C:\Investigation\Network_Connected_Processes -ItemType Directory -Force -ErrorAction SilentlyContinue
-Get-NetTCPConnection | Select-Object LocalAddress,LocalPort,RemoteAddress,RemotePort,OwningProcess | Where-Object {$_.RemoteAddress -ne $LocalIP} |Where-Object {$_.RemoteAddress -ne '0.0.0.0'} | Where-Object {$_.RemoteAddress -ne '::'} | Where-Object {$_.RemoteAddress -ne '::1'} | Sort-Object OwningProcess | Format-Table -AutoSize | Out-File C:\Investigation\Network_Connected_Processes\Network_Connected_Process_IDs.txt
+Get-NetTCPConnection | Select-Object LocalAddress,LocalPort,RemoteAddress,RemotePort,OwningProcess | Where-Object {$_.RemoteAddress -ne $LocalIP} | Where-Object {$_.RemoteAddress -ne '127.0.0.1'} | Where-Object {$_.RemoteAddress -ne '0.0.0.0'} | Where-Object {$_.RemoteAddress -ne '::'} | Where-Object {$_.RemoteAddress -ne '::1'} | Sort-Object OwningProcess | Format-Table -AutoSize | Out-File C:\Investigation\Network_Connected_Processes\Network_Connected_Process_IDs.txt
 ((Get-NetTCPConnection).OwningProcess | Sort-Object -Unique) | ForEach-Object {Get-Process -Id $_ | Select-Object Id,ProcessName | Sort-Object Id} | Out-File C:\Investigation\Network_Connected_Processes\Network_Connected_Process_Names.txt
 
 #>
