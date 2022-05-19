@@ -1,1 +1,1 @@
-Scripts to basic level takses for website scraping.
+Scripts to complete basic level takses for website scraping.
