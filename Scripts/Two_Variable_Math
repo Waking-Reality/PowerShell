@@ -1,0 +1,16 @@
+Clear-Host
+
+#(x * 7331) + (y * 1337) == 4868652
+
+$Numbers = 1..1000
+
+foreach ($Number in $Numbers){
+    $X = $Number
+    foreach ($Number in $Numbers){
+        $Y = $Number
+        $Answer = ($X * 7331) + ($Y * 1337)
+        if ($Answer -eq 4868652) {
+            Write-Host "$X ... $Y ... $Answer"
+        }
+    }
+}
