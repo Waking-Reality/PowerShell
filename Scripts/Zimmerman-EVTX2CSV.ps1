@@ -1,4 +1,5 @@
 # Convert .evtx files recursively in folder and export them as .csv with Eric Zimmerman Tools
+# "https://f001.backblazeb2.com/file/EricZimmermanTools/net6/EvtxECmd.zip"
 
 $Date = Get-Date -Format ddMMMyyyy
 $FilePath = "C:\Users\%USERNAME%\Downloads\Logs"
