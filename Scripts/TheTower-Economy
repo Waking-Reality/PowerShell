@@ -1,0 +1,21 @@
+Clear-Host
+
+Write-Host
+Write-Host "╔═════════════════════════════════════════════════════╗"
+Write-Host "║                                                     ║"
+Write-Host "║                 The Tower: Economy                  ║"
+Write-Host "║                                                     ║"
+Write-Host "╚═════════════════════════════════════════════════════╝"
+Write-Host
+
+$Coins = Read-Host "Enter the amount of coins you have earned so far"
+$Hours = Read-Host "Enter the number of hours you have played so far"
+$Minutes = Read-Host "Enter the number of minutes you have played so far"
+
+$Math = $Minutes/60+$Hours
+
+$Economy = $Coins/$Math
+
+Write-Host
+Write-Host "Your current coin economy is: $Economy"
+Write-Host
