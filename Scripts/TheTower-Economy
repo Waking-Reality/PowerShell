@@ -10,24 +10,42 @@ Write-Host
 
 $Coins = Read-Host "Enter the amount of coins you have earned so far"
 
+$valid = $false
 do {
     $Level = Read-Host "Enter the letter following your coins"
     switch ($Level) {
-        K { $Result = 'Thousand' }
-        k { $Result = 'Thousand' }
-        M { $Result = 'Million' }
-        m { $Result = 'Million' }
-        B { $Result = 'Billion' }
-        b { $Result = 'Billion' }
-        T { $Result = 'Trillion' }
-        t { $Result = 'Trillion' }
+        "K" { $Result = 'Thousand'
+              $valid = $true
+            }
+        "k" { $Result = 'Thousand'
+              $valid = $true
+            }
+        "M" { $Result = 'Million'
+              $valid = $true
+            }
+        "m" { $Result = 'Million'
+              $valid = $true
+            }
+        "B" { $Result = 'Billion'
+              $valid = $true
+            }
+        "b" { $Result = 'Billion'
+              $valid = $true
+            }
+        "T" { $Result = 'Trillion'
+              $valid = $true
+            }
+        "t" { $Result = 'Trillion'
+              $valid = $true
+            }
         default {
             Write-Host
             Write-Host "Invalid selection. Please enter K, M, B, T. Lowercase is fine as well."
             Write-Host
+            $valid = $false
         }
     }
-} while ($true)
+} while (-not $valid)
 
 $Hours = Read-Host "Enter the number of hours you have played so far"
 $Minutes = Read-Host "Enter the number of minutes you have played so far"
@@ -35,7 +53,8 @@ $Minutes = Read-Host "Enter the number of minutes you have played so far"
 $Math = $Minutes/60+$Hours
 
 $Economy = $Coins/$Math
+$RoundedEconomy = [Math]::Round($Economy, 2)
 
 Write-Host
-Write-Host "Your current coin economy is: $Economy $Result"
+Write-Host "Your current coin economy is: $RoundedEconomy $Result"
 Write-Host
