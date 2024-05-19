@@ -9,6 +9,17 @@ Write-Host "╚═════════════════════�
 Write-Host
 
 $Coins = Read-Host "Enter the amount of coins you have earned so far"
+$Level = Read-Host "Enter the letter following your coins"
+switch ($Level) {
+    K { $Result = 'Thousand' }
+    k { $Result = 'Thousand' }
+    M { $Result = 'Million' }
+    m { $Result = 'Million' }
+    B { $Result = 'Billion' }
+    b { $Result = 'Billion' }
+    T { $Result = 'Trillion' }
+    t { $Result = 'Trillion' }
+}
 $Hours = Read-Host "Enter the number of hours you have played so far"
 $Minutes = Read-Host "Enter the number of minutes you have played so far"
 
@@ -17,5 +28,5 @@ $Math = $Minutes/60+$Hours
 $Economy = $Coins/$Math
 
 Write-Host
-Write-Host "Your current coin economy is: $Economy"
+Write-Host "Your current coin economy is: $Economy $Result"
 Write-Host
