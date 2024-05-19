@@ -9,17 +9,26 @@ Write-Host "╚═════════════════════�
 Write-Host
 
 $Coins = Read-Host "Enter the amount of coins you have earned so far"
-$Level = Read-Host "Enter the letter following your coins"
-switch ($Level) {
-    K { $Result = 'Thousand' }
-    k { $Result = 'Thousand' }
-    M { $Result = 'Million' }
-    m { $Result = 'Million' }
-    B { $Result = 'Billion' }
-    b { $Result = 'Billion' }
-    T { $Result = 'Trillion' }
-    t { $Result = 'Trillion' }
-}
+
+do {
+    $Level = Read-Host "Enter the letter following your coins"
+    switch ($Level) {
+        K { $Result = 'Thousand' }
+        k { $Result = 'Thousand' }
+        M { $Result = 'Million' }
+        m { $Result = 'Million' }
+        B { $Result = 'Billion' }
+        b { $Result = 'Billion' }
+        T { $Result = 'Trillion' }
+        t { $Result = 'Trillion' }
+        default {
+            Write-Host
+            Write-Host "Invalid selection. Please enter K, M, B, T. Lowercase is fine as well."
+            Write-Host
+        }
+    }
+} while ($true)
+
 $Hours = Read-Host "Enter the number of hours you have played so far"
 $Minutes = Read-Host "Enter the number of minutes you have played so far"
 
