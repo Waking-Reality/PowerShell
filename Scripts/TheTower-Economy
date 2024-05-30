@@ -56,5 +56,5 @@ $Economy = $Coins/$Math
 $RoundedEconomy = [Math]::Round($Economy, 2)
 
 Write-Host
-Write-Host "Your current coin economy is: $RoundedEconomy $Result"
+Write-Host "Your current per hour coin economy is: $RoundedEconomy $Result"
 Write-Host
