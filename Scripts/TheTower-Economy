@@ -33,7 +33,7 @@ do {
             }
         default {
             Write-Host
-            Write-Host "Invalid selection. Please enter K, M, B, T. Lowercase is fine as well."
+            Write-Host "Invalid selection. Please enter M, B, T. Lowercase is fine as well."
             Write-Host
             $valid = $false
         }
