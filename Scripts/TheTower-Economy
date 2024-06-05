@@ -1,6 +1,4 @@
 Clear-Host
-
-Write-Host
 Write-Host "╔═════════════════════════════════════════════════════╗"
 Write-Host "║                                                     ║"
 Write-Host "║                 The Tower: Economy                  ║"
@@ -8,18 +6,13 @@ Write-Host "║                                                     ║"
 Write-Host "╚═════════════════════════════════════════════════════╝"
 Write-Host
 
-$Coins = Read-Host "Enter the amount of coins you have earned so far"
+[int]$Wave_Number = Read-Host "Enter your current wave"
+[int32]$Coins = Read-Host "Enter the amount of coins you have earned so far"
 
 $valid = $false
 do {
     $Level = Read-Host "Enter the letter following your coins"
     switch ($Level) {
-        "K" { $Result = 'Thousand'
-              $valid = $true
-            }
-        "k" { $Result = 'Thousand'
-              $valid = $true
-            }
         "M" { $Result = 'Million'
               $valid = $true
             }
@@ -47,14 +40,20 @@ do {
     }
 } while (-not $valid)
 
-$Hours = Read-Host "Enter the number of hours you have played so far"
-$Minutes = Read-Host "Enter the number of minutes you have played so far"
+[int]$Hours = Read-Host "Enter the number of hours displayed"
+[int]$Minutes = Read-Host "Enter the number of minutes displayed"
+[int]$Seconds = Read-Host "Enter the number of seconds displayed"
 
-$Math = $Minutes/60+$Hours
+[int32]$Minutes_Math = $Minutes/60
+[int32]$Seconds_Math = $Seconds/60/60
+[int32]$Math = $Hours + $Minutes_Math + $Seconds_Math
 
-$Economy = $Coins/$Math
-$RoundedEconomy = [Math]::Round($Economy, 2)
+$Time_Economy = $Coins / $Math
+$Rounded_Time_Economy = [Math]::Round($Time_Economy, 2)
+
+$Wave_Economy = $Coins / $Wave_Number
+$Rounded_Wave_Economy = [Math]::Round($Wave_Economy, 2)
 
 Write-Host
-Write-Host "Your current per hour coin economy is: $RoundedEconomy $Result"
-Write-Host
+Write-Host "Your estimated per hour coin economy is: $Rounded_Time_Economy $Result"
+Write-Host "Your estimated per wave coin economy is: $Rounded_Wave_Economy $Result"
