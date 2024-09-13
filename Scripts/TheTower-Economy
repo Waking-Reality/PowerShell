@@ -33,7 +33,7 @@ do {
             }
         default {
             Write-Host
-            Write-Host "Invalid selection. Please enter M, B, T. Lowercase is fine as well."
+            Write-Host "Invalid selection. Please enter K, M, B, T. Lowercase is fine as well."
             Write-Host
             $valid = $false
         }
@@ -47,13 +47,18 @@ do {
 [int32]$Minutes_Math = $Minutes/60
 [int32]$Seconds_Math = $Seconds/60/60
 [int32]$Math = $Hours + $Minutes_Math + $Seconds_Math
+[int32]$Multiplier = 1000
 
 $Time_Economy = $Coins / $Math
 $Rounded_Time_Economy = [Math]::Round($Time_Economy, 2)
 
-$Wave_Economy = $Coins / $Wave_Number
+$Day_Economy = $Coins / $Math * 24
+$Rounded_Day_Economy = [Math]::Round($Day_Economy, 2)
+
+$Wave_Economy = $Coins * $Multiplier / $Wave_Number
 $Rounded_Wave_Economy = [Math]::Round($Wave_Economy, 2)
 
 Write-Host
+Write-Host "Your estimated per 24 hour coin economy is: $Rounded_Day_Economy $Result"
 Write-Host "Your estimated per hour coin economy is: $Rounded_Time_Economy $Result"
-Write-Host "Your estimated per wave coin economy is: $Rounded_Wave_Economy $Result"
+Write-Host "Your estimated per wave coin economy is: $Rounded_Wave_Economy Billion"
