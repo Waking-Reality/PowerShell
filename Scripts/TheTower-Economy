@@ -55,7 +55,7 @@ $Rounded_Time_Economy = [Math]::Round($Time_Economy, 2)
 $Day_Economy = $Coins / $Math * 24
 $Rounded_Day_Economy = [Math]::Round($Day_Economy, 2)
 
-$Wave_Economy = $Coins * $Multiplier / $Wave_Number
+$Wave_Economy = $Coins / $Wave_Number * $Multiplier 
 $Rounded_Wave_Economy = [Math]::Round($Wave_Economy, 2)
 
 Write-Host
