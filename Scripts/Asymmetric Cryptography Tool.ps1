@@ -1,4 +1,4 @@
-﻿# Load Required GUI Assemblies
+# Load Required GUI Assemblies
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
@@ -67,7 +67,7 @@ function Get-OpenFile($title, $filter) {
 
 $form = New-Object System.Windows.Forms.Form
 $form.Text = "Asymmetric Cryptography Tool"
-$form.Size = New-Object System.Drawing.Size(350, 360)
+$form.Size = New-Object System.Drawing.Size(350, 450)
 $form.StartPosition = "CenterScreen"
 $form.FormBorderStyle = "FixedDialog"
 $form.MaximizeBox = $false
@@ -174,9 +174,38 @@ $btnEncrypt.Add_Click({
 })
 $form.Controls.Add($btnEncrypt)
 
+# --- Button: Sign File ---
+$btnSign = New-Object System.Windows.Forms.Button
+$btnSign.Location = New-Object System.Drawing.Point(50, 195)
+$btnSign.Size = New-Object System.Drawing.Size(230, 35)
+$btnSign.Text = "Sign a File (using Private Key)"
+$btnSign.Add_Click({$privKey = Get-OpenFile -title "1. Select Private Key" -filter "PEM Files (*.pem)|*.pem|All Files (*.*)|*.*"
+    if ($privKey) {$inFile = Get-OpenFile -title "2. Select File to Sign" -filter "All Files (*.*)|*.*"
+        if ($inFile) {$outFile = Get-SaveFile -title "3. Save Signature As..." -filter "Signature Files (*.sig)|*.sig|All Files (*.*)|*.*"
+            if ($outFile) {
+                try {
+                    $lblStatus.Text = "Signing file... Please wait."
+                    $form.Refresh()
+
+                    # Create a SHA-256 hash and sign it with the private key
+                    $output = & openssl dgst -sha256 -sign$privKey -out $outFile$inFile 2>&1
+                    if ($LASTEXITCODE -ne 0) { throw ($output -join "`n") }
+
+                    $lblStatus.Text = "File signed successfully!"
+                    [System.Windows.Forms.MessageBox]::Show("Signature saved to:`n$outFile", "Success") | Out-Null
+                } catch {
+                    [System.Windows.Forms.MessageBox]::Show("Signing Error: $_", "Error") | Out-Null
+                    $lblStatus.Text = "Signing failed."
+                }
+            }
+        }
+    }
+})
+$form.Controls.Add($btnSign)
+
 # --- Button: Decrypt File (Hybrid, Supports Large Files) ---
 $btnDecrypt = New-Object System.Windows.Forms.Button
-$btnDecrypt.Location = New-Object System.Drawing.Point(50, 195)
+$btnDecrypt.Location = New-Object System.Drawing.Point(50, 240)
 $btnDecrypt.Size = New-Object System.Drawing.Size(230, 35)
 $btnDecrypt.Text = "Decrypt a File (using Private Key)"
 $btnDecrypt.Add_Click({
@@ -226,9 +255,42 @@ $btnDecrypt.Add_Click({
 })
 $form.Controls.Add($btnDecrypt)
 
+# --- Button: Verify Signature ---
+$btnVerify = New-Object System.Windows.Forms.Button
+$btnVerify.Location = New-Object System.Drawing.Point(50, 285)
+$btnVerify.Size = New-Object System.Drawing.Size(230, 35)
+$btnVerify.Text = "Verify Signature (using Public Key)"
+$btnVerify.Add_Click({$pubKey = Get-OpenFile -title "1. Select Public Key" -filter "PEM Files (*.pem)|*.pem|All Files (*.*)|*.*"
+    if ($pubKey) {$sigFile = Get-OpenFile -title "2. Select Signature File (.sig)" -filter "Signature Files (*.sig)|*.sig|All Files (*.*)|*.*"
+        if ($sigFile) {$inFile = Get-OpenFile -title "3. Select Original File" -filter "All Files (*.*)|*.*"
+            if ($inFile) {
+                try {
+                    $lblStatus.Text = "Verifying signature... Please wait."
+                    $form.Refresh()
+
+                    # Verify the signature against the original file
+                    $output = & openssl dgst -sha256 -verify$pubKey -signature $sigFile$inFile 2>&1
+                    
+                    if ($LASTEXITCODE -eq 0 -and$output -match "Verified OK") {
+                        $lblStatus.Text = "Signature Verified OK!"
+                        [System.Windows.Forms.MessageBox]::Show("The signature is valid.`n`nThe file is authentic and has not been tampered with.", "Verification Success", 0, [System.Windows.Forms.MessageBoxIcon]::Information) | Out-Null
+                    } else {
+                        $lblStatus.Text = "Verification Failed!"
+                        [System.Windows.Forms.MessageBox]::Show("Verification failed!`n`nThe file may have been tampered with, or you are using the wrong Public Key.`n`nOpenSSL Output: $output", "Verification Error", 0, [System.Windows.Forms.MessageBoxIcon]::Warning) | Out-Null
+                    }
+                } catch {
+                    [System.Windows.Forms.MessageBox]::Show("Verification Error: $_", "Error") | Out-Null
+                    $lblStatus.Text = "Verification failed."
+                }
+            }
+        }
+    }
+})
+$form.Controls.Add($btnVerify)
+
 # --- Button: Exit ---
 $btnExit = New-Object System.Windows.Forms.Button
-$btnExit.Location = New-Object System.Drawing.Point(125, 260)
+$btnExit.Location = New-Object System.Drawing.Point(125, 360)
 $btnExit.Size = New-Object System.Drawing.Size(80, 30)
 $btnExit.Text = "Exit"
 $btnExit.Add_Click({$form.Close()
